@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ma Boutique</title>
+</head>
+<body>
+
+    <h1>Bienvenue dans ma boutique</h1>
+
+    {% for produit in produits %}
+        <div>
+            <h2>{{ produit.nom }}</h2>
+            <p>{{ produit.description }}</p>
+            <p>Prix : {{ produit.prix }} FCFA</p>
+            <p>Stock : {{ produit.stock }}</p>
+        </div>
+        <hr>
+    {% empty %}
+        <p>Aucun produit disponible.</p>
+    {% endfor %}
+
+</body>
+</html>
