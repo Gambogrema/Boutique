@@ -27,10 +27,12 @@ def afficher_panier(request):
 
     for produit_id, quantite in panier.items():
         produit = get_object_or_404(Produit, id=produit_id)
+
         sous_total = produit.prix * quantite
 
         produits.append({
             "produit": produit,
+            "produit_id": produit.id,
             "quantite": quantite,
             "sous_total": sous_total,
         })
@@ -41,3 +43,43 @@ def afficher_panier(request):
         "produits": produits,
         "total": total,
     })
+
+
+def augmenter_quantite(request, produit_id):
+    panier = request.session.get("panier", {})
+    produit_id = str(produit_id)
+
+    if produit_id in panier:
+        panier[produit_id] += 1
+
+    request.session["panier"] = panier
+    request.session.modified = True
+
+    return redirect("panier")
+
+
+def diminuer_quantite(request, produit_id):
+    panier = request.session.get("panier", {})
+    produit_id = str(produit_id)
+
+    if produit_id in panier:
+        panier[produit_id] -= 1
+
+        if panier[produit_id] <= 0:
+            del panier[produit_id]
+
+    request.session["panier"] = panier
+    request.session.modified = True
+
+    return redirect("panier")
+def supprimer_du_panier(request, produit_id):
+    panier = request.session.get("panier", {})
+    produit_id = str(produit_id)
+
+    if produit_id in panier:
+        del panier[produit_id]
+
+    request.session["panier"] = panier
+    request.session.modified = True
+
+    return redirect("panier")

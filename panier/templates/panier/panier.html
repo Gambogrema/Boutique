@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Mon panier</title>
 </head>
+
 <body>
 
 <h1>🛒 Mon panier</h1>
@@ -11,20 +12,42 @@
 {% if produits %}
 
     {% for item in produits %}
+
         <div>
             <h2>{{ item.produit.nom }}</h2>
 
-            <p>Prix : {{ item.produit.prix }} FCFA</p>
+            <p>
+                Prix : {{ item.produit.prix }} FCFA
+            </p>
 
-            <p>Quantité : {{ item.quantite }}</p>
+            <p>
+                Quantité :
 
-            <p>Sous-total : {{ item.sous_total }} FCFA</p>
-        </div>
+                <a href="{% url 'diminuer_quantite' item.produit_id %}">
+                    ➖
+                </a>
+
+                {{ item.quantite }}
+
+                <a href="{% url 'augmenter_quantite' item.produit_id %}">
+                    ➕
+                </a>
+            </p>
+
+            <p>
+                Sous-total : {{ item.sous_total }} FCFA
+            </p>
+        </div><a href="{% url 'supprimer_du_panier' item.produit_id %}">
+    🗑️ Supprimer
+</a>
 
         <hr>
+
     {% endfor %}
 
-    <h2>Total : {{ total }} FCFA</h2>
+    <h2>
+        Total : {{ total }} FCFA
+    </h2>
 
 {% else %}
 
