@@ -14,7 +14,10 @@
             <p>{{ produit.description }}</p>
             <p>Prix : {{ produit.prix }} FCFA</p>
             <p>Stock : {{ produit.stock }}</p>
-        </div>
+      <a href="{% url 'ajouter_au_panier' produit.id %}">
+    Ajouter au panier 🛒
+</a> 
+ </div>
         <hr>
     {% empty %}
         <p>Aucun produit disponible.</p>

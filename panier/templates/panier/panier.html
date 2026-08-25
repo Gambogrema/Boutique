@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mon panier</title>
+</head>
+<body>
+
+<h1>🛒 Mon panier</h1>
+
+{% if produits %}
+
+    {% for item in produits %}
+        <div>
+            <h2>{{ item.produit.nom }}</h2>
+
+            <p>Prix : {{ item.produit.prix }} FCFA</p>
+
+            <p>Quantité : {{ item.quantite }}</p>
+
+            <p>Sous-total : {{ item.sous_total }} FCFA</p>
+        </div>
+
+        <hr>
+    {% endfor %}
+
+    <h2>Total : {{ total }} FCFA</h2>
+
+{% else %}
+
+    <p>Votre panier est vide.</p>
+
+{% endif %}
+
+<a href="{% url 'accueil' %}">
+    Continuer mes achats
+</a>
+
+</body>
+</html>
