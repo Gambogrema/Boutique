@@ -1,27 +1,388 @@
-<!DOCTYPE html>
-<html lang="fr">
+<!DOCTYPE html><html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Ma Boutique</title>
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Ma Boutique</title>
 
-    <h1>Bienvenue dans ma boutique</h1>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f3f4f6;
+        color: #1f2937;
+    }
+
+    /* HEADER */
+    header {
+        background: #111827;
+        color: white;
+        padding: 18px 20px;
+    }
+
+    .header-content {
+        max-width: 1100px;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    .logo {
+        font-size: 25px;
+        font-weight: bold;
+    }
+
+    .slogan {
+        margin: 5px 0 0;
+        color: #d1d5db;
+        font-size: 14px;
+    }
+
+    .panier {
+        text-decoration: none;
+        background: #16a34a;
+        color: white;
+        padding: 11px 16px;
+        border-radius: 8px;
+        font-weight: bold;
+        white-space: nowrap;
+   .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    margin-left: 5px;
+    padding: 2px 6px;
+    border-radius: 50%;
+    background: white;
+    color: #16a34a;
+    font-size: 13px;
+    font-weight: bold;
+} 
+
+    .panier:hover {
+        background: #15803d;
+    }
+
+    /* CONTENU */
+    .container {
+        max-width: 1100px;
+        margin: auto;
+        padding: 25px 20px;
+    }
+
+    .titre-section {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .titre-section h1 {
+        margin-bottom: 8px;
+    }
+
+    .titre-section p {
+        color: #6b7280;
+    }
+
+    /* PRODUITS */
+    .produits {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 22px;
+    }
+
+    .produit {
+        background: white;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .produit:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+    }
+
+    .produit img {
+        width: 100%;
+        height: 230px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .sans-image {
+        height: 230px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #e5e7eb;
+        color: #6b7280;
+    }
+
+    .contenu {
+        padding: 17px;
+    }
+
+    .contenu h2 {
+        margin: 0 0 10px;
+        font-size: 21px;
+    }
+
+    .description {
+        color: #6b7280;
+        line-height: 1.5;
+        min-height: 45px;
+    }
+
+    .prix {
+        font-size: 21px;
+        font-weight: bold;
+        margin: 15px 0 8px;
+    }
+
+    .stock {
+        margin: 0 0 15px;
+        color: #16a34a;
+        font-weight: bold;
+    }
+
+    .stock-rupture {
+        color: #dc2626;
+    }
+
+    .bouton {
+        display: block;
+        text-align: center;
+        text-decoration: none;
+        background: #16a34a;
+        color: white;
+        padding: 13px;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+
+    .bouton:hover {
+        background: #15803d;
+    }
+
+    .bouton-desactive {
+        display: block;
+        text-align: center;
+        background: #9ca3af;
+        color: white;
+        padding: 13px;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+
+    /* PRODUITS VIDES */
+    .vide {
+        grid-column: 1 / -1;
+        text-align: center;
+        background: white;
+        padding: 40px 20px;
+        border-radius: 12px;
+    }
+
+    /* FOOTER */
+    footer {
+        margin-top: 40px;
+        padding: 25px;
+        text-align: center;
+        background: #111827;
+        color: #d1d5db;
+    }
+
+    /* MOBILE */
+    @media (max-width: 600px) {
+
+        header {
+            padding: 15px;
+        }
+
+        .header-content {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .container {
+            padding: 20px 12px;
+        }
+
+        .produits {
+            grid-template-columns: 1fr;
+        }
+
+        .produit img,
+        .sans-image {
+            height: 250px;
+        }
+
+        .titre-section h1 {
+            font-size: 25px;
+        }
+    }
+</style>
+
+</head><body><header><div class="header-content">
+
+    <div>
+        <div class="logo">
+            🛍️ Ma Boutique
+        </div>
+
+        <p class="slogan">
+            Des produits de qualité au meilleur prix
+        </p>
+    </div>
+
+<a class="panier" href="{% url 'panier' %}">
+    🛒 Panier
+    {% if nombre_articles > 0 %}
+        <span class="badge">{{ nombre_articles }}</span>
+    {% endif %}
+</a>
+</div>
+<div style="text-align: center; padding: 15px;">
+    <a href="{% url 'panier' %}"
+       style="
+           display: inline-block;
+           background: #2563eb;
+           color: white;
+           padding: 12px 20px;
+           border-radius: 8px;
+           text-decoration: none;
+           font-weight: bold;
+       ">
+        🛒 Mon panier ({{ nombre_articles }})
+    </a>
+</div>
+</header><main class="container"><div class="titre-section">
+
+    <h1>Nos produits</h1>
+
+    <p>
+        Découvrez nos produits et ajoutez vos favoris à votre panier.
+    </p>
+
+</div>
+
+
+<div class="produits">
 
     {% for produit in produits %}
-        <div>
-            <h2>{{ produit.nom }}</h2>
-            <p>{{ produit.description }}</p>
-            <p>Prix : {{ produit.prix }} FCFA</p>
-            <p>Stock : {{ produit.stock }}</p>
-      <a href="{% url 'ajouter_au_panier' produit.id %}">
-    Ajouter au panier 🛒
-</a> 
- </div>
-        <hr>
+
+        <div class="produit">
+
+            {% if produit.image %}
+
+                <img
+                    src="{{ produit.image.url }}"
+                    alt="{{ produit.nom }}"
+                >
+
+            {% else %}
+
+                <div class="sans-image">
+                    🖼️ Aucune image
+                </div>
+
+            {% endif %}
+
+
+            <div class="contenu">
+
+                <h2>
+                    {{ produit.nom }}
+                </h2>
+
+
+{% if produit.stock > 0 %}
+
+    {% if produit.stock <= 2 %}
+
+        <p style="color: #ea580c; font-weight: bold;">
+            ⚠️ Plus que {{ produit.stock }} disponible{{ produit.stock|pluralize }}
+        </p>
+
+    {% else %}
+
+        <p style="color: #16a34a; font-weight: bold;">
+            ✅ En stock : {{ produit.stock }}
+        </p>
+
+    {% endif %}
+
+{% else %}
+
+    <p style="color: #dc2626; font-weight: bold;">
+        ❌ Rupture de stock
+    </p>
+
+{% endif %}                <p class="description">
+                    {{ produit.description }}
+                </p>
+
+
+                <p class="prix">
+                    {{ produit.prix }} FCFA
+                </p>
+
+
+                {% if produit.stock > 0 %}
+
+                    <p class="stock">
+                        ✓ Stock disponible : {{ produit.stock }}
+                    </p>
+
+                    <a
+                        class="bouton"
+                        href="{% url 'ajouter_au_panier' produit.id %}"
+                    >
+                        🛒 Ajouter au panier
+                    </a>
+
+                {% else %}
+
+                    <p class="stock stock-rupture">
+                        ✕ Produit en rupture de stock
+                    </p>
+
+                    <span class="bouton-desactive">
+                        Indisponible
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
     {% empty %}
-        <p>Aucun produit disponible.</p>
+
+        <div class="vide">
+
+            <h2>😔 Aucun produit</h2>
+
+            <p>
+                Aucun produit n'est actuellement disponible.
+            </p>
+
+        </div>
+
     {% endfor %}
 
-</body>
+</div>
+
+</main><footer><p>
+    © 2026 Ma Boutique — Tous droits réservés
+</p>
+
+</footer></body>
 </html>

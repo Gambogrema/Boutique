@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Commande confirmée - Ma Boutique</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 35px auto;
+            padding: 0 15px;
+        }
+
+        .confirmation {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 14px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.10);
+        }
+
+        .icone {
+            font-size: 60px;
+        }
+
+        h1 {
+            color: #16a34a;
+        }
+
+        .commande {
+            background: #f3f4f6;
+            padding: 18px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .commande p {
+            margin: 10px 0;
+        }
+
+        .bouton {
+            display: block;
+            text-decoration: none;
+            color: white;
+            background: #2563eb;
+            padding: 14px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        .bouton.vert {
+            background: #16a34a;
+        }
+
+        .bouton.suivi {
+            background: #f59e0b;
+        }
+
+        .bouton:hover {
+            opacity: 0.9;
+        }
+
+        .message {
+            color: #6b7280;
+        }
+
+        @media (max-width: 500px) {
+
+            .container {
+                margin: 20px auto;
+                padding: 0 10px;
+            }
+
+            .confirmation {
+                padding: 25px 16px;
+            }
+
+            .icone {
+                font-size: 50px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>🛍️ Ma Boutique</h2>
+</header>
+
+<div class="container">
+
+    <div class="confirmation">
+
+        <div class="icone">
+            ✅
+        </div>
+
+        <h1>Commande confirmée !</h1>
+
+        <p class="message">
+            Merci pour votre commande, {{ commande.nom }}.
+        </p>
+
+        <p>
+            Votre commande a bien été enregistrée.
+        </p>
+
+        <div class="commande">
+
+            <p>
+                <strong>Numéro de commande :</strong>
+                #{{ commande.id }}
+            </p>
+
+            <p>
+                <strong>Client :</strong>
+                {{ commande.nom }}
+            </p>
+
+            <p>
+                <strong>Téléphone :</strong>
+                {{ commande.telephone }}
+            </p>
+
+            <p>
+                <strong>Adresse :</strong>
+                {{ commande.adresse }}
+            </p>
+
+            <p>
+                <strong>Total :</strong>
+                {{ commande.total }} FCFA
+            </p>
+
+            <p>
+                <strong>Date :</strong>
+                {{ commande.date_commande|date:"d/m/Y H:i" }}
+            </p>
+
+        </div>
+
+        <!-- SUIVI DE COMMANDE -->
+
+        <a
+            class="bouton suivi"
+            href="{% url 'suivi_commande' commande.id %}">
+            📦 Suivre ma commande
+        </a>
+
+        <!-- RETOUR ACCUEIL -->
+
+        <a
+            class="bouton vert"
+            href="{% url 'accueil' %}">
+            🏠 Retour à l'accueil
+        </a>
+
+        <!-- PANIER -->
+
+        <a
+            class="bouton"
+            href="{% url 'panier' %}">
+            🛒 Voir mon panier
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

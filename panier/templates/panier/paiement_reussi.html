@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Paiement réussi - Ma Boutique</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 550px;
+            margin: 30px auto;
+            padding: 15px;
+        }
+
+        .carte {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.10);
+        }
+
+        .icone {
+            font-size: 65px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #16a34a;
+            margin-bottom: 10px;
+        }
+
+        .message {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .details {
+            background: #f3f4f6;
+            padding: 18px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .details p {
+            margin: 10px 0;
+        }
+
+        .total {
+            font-size: 22px;
+            font-weight: bold;
+            color: #111827;
+        }
+
+        .bouton {
+            display: block;
+            text-decoration: none;
+            color: white;
+            background: #2563eb;
+            padding: 14px;
+            border-radius: 9px;
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        .bouton.vert {
+            background: #16a34a;
+        }
+
+        .bouton:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                margin: 15px auto;
+                padding: 10px;
+            }
+
+            .carte {
+                padding: 25px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>🛍️ Ma Boutique</h2>
+</header>
+
+<div class="container">
+
+    <div class="carte">
+
+        <div class="icone">
+            ✅
+        </div>
+
+        <h1>Paiement réussi !</h1>
+
+        <p class="message">
+            Merci {{ commande.nom }}.
+        </p>
+
+        <p class="message">
+            Votre paiement a été enregistré avec succès.
+        </p>
+
+        <div class="details">
+
+            <p>
+                <strong>Commande :</strong>
+                #{{ commande.id }}
+            </p>
+
+            <p>
+                <strong>Client :</strong>
+                {{ commande.nom }}
+            </p>
+
+            <p>
+                <strong>Téléphone :</strong>
+                {{ commande.telephone }}
+            </p>
+
+            <p>
+                <strong>Total payé :</strong>
+                <span class="total">
+                    {{ commande.total }} FCFA
+                </span>
+            </p>
+
+        </div>
+
+        <a
+            class="bouton vert"
+            href="{% url 'suivi_commande' commande.id %}">
+            📦 Suivre ma commande
+        </a>
+
+        <a
+            class="bouton"
+            href="{% url 'accueil' %}">
+            🏠 Retour à la boutique
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

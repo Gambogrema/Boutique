@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Passer la commande - Ma Boutique</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 20px 15px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: auto;
+            padding: 15px;
+        }
+
+        .carte {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 14px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .carte h2 {
+            margin-top: 0;
+            font-size: 20px;
+        }
+
+        /* PRODUITS */
+
+        .article {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .article:last-child {
+            border-bottom: none;
+        }
+
+        .article-image {
+            width: 65px;
+            height: 65px;
+            min-width: 65px;
+            object-fit: cover;
+            border-radius: 9px;
+        }
+
+        .article-sans-image {
+            width: 65px;
+            height: 65px;
+            min-width: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e5e7eb;
+            color: #6b7280;
+            border-radius: 9px;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .article-info {
+            flex: 1;
+        }
+
+        .article-nom {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .article-details {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .article-total {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        /* TOTAL */
+
+        .total-box {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .ligne {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .grand-total {
+            font-size: 21px;
+            font-weight: bold;
+        }
+
+        /* FORMULAIRE */
+
+        form p {
+            margin-bottom: 16px;
+        }
+
+        form label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        form input,
+        form textarea,
+        form select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 9px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+        }
+
+        form textarea {
+            min-height: 100px;
+        }
+
+        /* BOUTON */
+
+        .confirmer {
+            width: 100%;
+            border: none;
+            background: #16a34a;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .confirmer:hover {
+            background: #15803d;
+        }
+
+        .retour {
+            display: block;
+            text-align: center;
+            margin: 18px 0;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        @media (max-width: 500px) {
+
+            .container {
+                padding: 10px;
+            }
+
+            .carte {
+                padding: 16px;
+            }
+
+            header h1 {
+                font-size: 22px;
+            }
+
+            .article-total {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>📦 Passer la commande</h1>
+</header>
+
+<div class="container">
+
+    <!-- RÉSUMÉ DE LA COMMANDE -->
+
+    <div class="carte">
+
+        <h2>🧾 Votre commande</h2>
+
+        {% for item in produits %}
+
+            <div class="article">
+
+                {% if item.produit.image %}
+
+                    <img
+                        src="{{ item.produit.image.url }}"
+                        alt="{{ item.produit.nom }}"
+                        class="article-image">
+
+                {% else %}
+
+                    <div class="article-sans-image">
+                        Aucune image
+                    </div>
+
+                {% endif %}
+
+                <div class="article-info">
+
+                    <div class="article-nom">
+                        {{ item.produit.nom }}
+                    </div>
+
+                    <div class="article-details">
+                        {{ item.produit.prix }} FCFA × {{ item.quantite }}
+                    </div>
+
+                </div>
+
+                <div class="article-total">
+                    {{ item.sous_total }} FCFA
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+        <div class="total-box">
+
+            <div class="ligne grand-total">
+                <span>Total</span>
+
+                <span>
+                    {{ total }} FCFA
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- INFORMATIONS CLIENT -->
+
+    <div class="carte">
+
+        <h2>👤 Informations de livraison</h2>
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button
+                type="submit"
+                class="confirmer">
+                ✅ Confirmer la commande
+            </button>
+
+        </form>
+
+    </div>
+
+    <a
+        class="retour"
+        href="{% url 'panier' %}">
+        ← Retour au panier
+    </a>
+
+</div>
+
+</body>
+</html>

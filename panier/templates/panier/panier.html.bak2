@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mon panier - Ma Boutique</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .produit {
+            background: white;
+            padding: 18px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        /* IMAGE DU PRODUIT */
+        .image-produit {
+            display: block;
+            width: 120px;
+            height: 120px;
+            max-width: 120px;
+            max-height: 120px;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            border-radius: 10px;
+        }
+
+        .sans-image {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e5e7eb;
+            color: #6b7280;
+            border-radius: 10px;
+        }
+
+        .produit h2 {
+            margin-top: 0;
+        }
+
+        .prix {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .quantite {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 15px 0;
+        }
+
+        .quantite a {
+            display: inline-flex;
+            width: 40px;
+            height: 40px;
+            align-items: center;
+            justify-content: center;
+            background: #e5e7eb;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .nombre {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .supprimer {
+            color: #dc2626;
+            text-decoration: none;
+        }
+
+        .total {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .commande {
+            display: block;
+            text-align: center;
+            background: #16a34a;
+            color: white;
+            text-decoration: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .accueil {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .vide {
+            background: white;
+            text-align: center;
+            padding: 40px 20px;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🛒 Mon panier</h1>
+</header>
+
+<div class="container">
+
+    {% if produits %}
+
+        {% for item in produits %}
+
+            <div class="produit">
+
+                {% if item.produit.image %}
+                    <img
+                        src="{{ item.produit.image.url }}"
+                        alt="{{ item.produit.nom }}"
+                        class="image-produit">
+                {% else %}
+                    <div class="sans-image">
+                        Aucune image
+                    </div>
+                {% endif %}
+
+                <h2>{{ item.produit.nom }}</h2>
+
+                <p class="prix">
+                    Prix unitaire : {{ item.produit.prix }} FCFA
+                </p>
+
+                <div class="quantite">
+
+                    <a href="{% url 'diminuer_quantite' item.produit_id %}">
+                        ➖
+                    </a>
+
+                    <span class="nombre">
+                        {{ item.quantite }}
+                    </span>
+
+                    <a href="{% url 'augmenter_quantite' item.produit_id %}">
+                        ➕
+                    </a>
+
+                </div>
+
+                <p>
+                    {{ item.produit.prix }} FCFA × {{ item.quantite }}
+                    =
+                    <strong>{{ item.sous_total }} FCFA</strong>
+                </p>
+
+                <a
+                    class="supprimer"
+                    href="{% url 'supprimer_du_panier' item.produit_id %}">
+                    🗑️ Supprimer
+                </a>
+
+            </div>
+
+        {% endfor %}
+
+        <div class="total">
+
+            <h2>
+                🧾 Résumé de la commande
+            </h2>
+
+            <p>
+                Nombre d'articles :
+                <strong>{{ nombre_articles }}</strong>
+            </p>
+
+            <p>
+                Total :
+                <strong>{{ total }} FCFA</strong>
+            </p>
+
+            <a
+                class="commande"
+                href="{% url 'passer_commande' %}">
+                🧾 Passer la commande
+            </a>
+
+        </div>
+
+    {% else %}
+
+        <div class="vide">
+
+            <h2>🛒 Votre panier est vide</h2>
+
+            <p>
+                Ajoutez des produits à votre panier pour commencer.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+    <a
+        class="accueil"
+        href="{% url 'accueil' %}">
+        ← Continuer mes achats
+    </a>
+
+</div>
+
+</body>
+</html>

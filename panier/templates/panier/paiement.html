@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Paiement - Ma Boutique</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 550px;
+            margin: 30px auto;
+            padding: 15px;
+        }
+
+        .carte {
+            background: white;
+            padding: 25px 20px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.10);
+            text-align: center;
+        }
+
+        .icone {
+            font-size: 55px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .numero {
+            color: #6b7280;
+        }
+
+        .total {
+            background: #f3f4f6;
+            padding: 18px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .bouton {
+            display: block;
+            width: 100%;
+            border: none;
+            text-decoration: none;
+            color: white;
+            background: #16a34a;
+            padding: 15px;
+            border-radius: 9px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .annuler {
+            display: block;
+            margin-top: 15px;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                margin: 15px auto;
+                padding: 10px;
+            }
+
+            .carte {
+                padding: 22px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>🛍️ Ma Boutique</h2>
+</header>
+
+<div class="container">
+
+    <div class="carte">
+
+        <div class="icone">
+            💳
+        </div>
+
+        <h1>Paiement</h1>
+
+        <p class="numero">
+            Commande #{{ commande.id }}
+        </p>
+
+        <p>
+            Bonjour <strong>{{ commande.nom }}</strong>,
+        </p>
+
+        <p>
+            Vérifiez le montant avant de continuer.
+        </p>
+
+        <div class="total">
+            💰 {{ commande.total }} FCFA
+        </div>
+
+        <a
+            class="bouton"
+            href="{% url 'paiement_reussi' commande.id %}">
+            🟢 Simuler le paiement
+        </a>
+
+        <a
+            class="annuler"
+            href="{% url 'commande_confirmation' commande.id %}">
+            ← Retour à la commande
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Passer la commande - Ma Boutique</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        .formulaire {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.10);
+        }
+
+        .formulaire h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        form p {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        .total {
+            background: #f3f4f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .total h2 {
+            margin: 0;
+        }
+
+        button {
+            width: 100%;
+            border: none;
+            background: #16a34a;
+            color: white;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #15803d;
+        }
+
+        .retour {
+            display: block;
+            text-align: center;
+            margin-top: 18px;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .aide {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .erreur {
+            color: #dc2626;
+            font-size: 14px;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                margin-top: 15px;
+            }
+
+            .formulaire {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>📦 Finaliser ma commande</h1>
+</header>
+
+<div class="container">
+
+    <div class="formulaire">
+
+        <h2>👤 Informations du client</h2>
+
+        <p class="aide">
+            Veuillez renseigner vos informations pour recevoir votre commande.
+        </p>
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <div class="total">
+                <h2>
+                    Total : {{ total }} FCFA
+                </h2>
+            </div>
+
+            <button type="submit">
+                ✅ Confirmer la commande
+            </button>
+
+        </form>
+
+        <a class="retour" href="{% url 'panier' %}">
+            ← Retour au panier
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
