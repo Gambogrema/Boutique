@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tableau de bord fournisseur</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f4f6;
+            color: #111827;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 22px 15px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0 0 8px;
+            font-size: 25px;
+        }
+
+        header p {
+            margin: 0;
+            color: #d1d5db;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 25px auto;
+            padding: 0 15px;
+        }
+
+        .cartes {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .carte {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .carte .icone {
+            font-size: 28px;
+        }
+
+        .carte .titre {
+            color: #6b7280;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        .carte .valeur {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 7px;
+        }
+
+        .bloc {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+        }
+
+        .bloc h2 {
+            margin-top: 0;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        th {
+            background: #f9fafb;
+        }
+
+        .statut {
+            font-weight: bold;
+        }
+
+        .en_attente {
+            color: #92400e;
+        }
+
+        .confirmee {
+            color: #1d4ed8;
+        }
+
+        .livraison {
+            color: #6d28d9;
+        }
+
+        .livree {
+            color: #15803d;
+        }
+
+        .annulee {
+            color: #b91c1c;
+        }
+
+        .vide {
+            text-align: center;
+            padding: 30px;
+            color: #6b7280;
+        }
+
+        .boutons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .bouton {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            background: #2563eb;
+            padding: 13px 18px;
+            border-radius: 9px;
+            font-weight: bold;
+        }
+
+        .bouton.rouge {
+            background: #dc2626;
+        }
+
+        @media (max-width: 850px) {
+            .cartes {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .cartes {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 10px;
+     
+form {
+    margin-top: 8px;
+}
+
+button {
+    border: none;
+    padding: 8px 10px;
+    border-radius: 7px;
+    background: #2563eb;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.85;
+}       }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>📦 Tableau de bord fournisseur</h1>
+    <p>{{ fournisseur.nom }}</p>
+</header>
+
+<div class="container">
+
+    <div class="cartes">
+
+        <div class="carte">
+            <div class="icone">📦</div>
+            <div class="titre">Commandes</div>
+            <div class="valeur">
+                {{ total_commandes }}
+            </div>
+        </div>
+
+        <div class="carte">
+            <div class="icone">💵</div>
+            <div class="titre">Montant à recevoir</div>
+            <div class="valeur">
+                {{ montant_a_recevoir }} FCFA
+            </div>
+        </div>
+
+        <div class="carte">
+            <div class="icone">🛒</div>
+            <div class="titre">Chiffre d'affaires</div>
+            <div class="valeur">
+                {{ chiffre_affaires }} FCFA
+            </div>
+        </div>
+
+        <div class="carte">
+            <div class="icone">📈</div>
+            <div class="titre">Marge totale</div>
+            <div class="valeur">
+                {{ marge_totale }} FCFA
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="bloc">
+
+        <h2>📋 Commandes</h2>
+
+        {% if lignes %}
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Commande</th>
+                        <th>Date</th>
+                        <th>Produit</th>
+                        <th>Quantité</th>
+                        <th>Prix fournisseur</th>
+                        <th>Montant</th>
+                        <th>Statut paiement</th>
+                        <th>Statut commande</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for ligne in lignes %}
+
+                    <tr>
+
+                        <td>
+                            #{{ ligne.commande.id }}
+                        </td>
+
+                        <td>
+                            {{ ligne.commande.date_commande|date:"d/m/Y H:i" }}
+                        </td>
+
+                        <td>
+                            {{ ligne.produit.nom }}
+                        </td>
+
+                        <td>
+                            {{ ligne.quantite }}
+                        </td>
+
+                        <td>
+                            {{ ligne.prix_fournisseur }} FCFA
+                        </td>
+
+                        <td>
+                            {{ ligne.prix_fournisseur|floatformat:2 }} FCFA
+                        </td>
+
+                        <td class="statut {{ ligne.commande.statut_paiement }}">
+                            {% if ligne.commande.statut_paiement == "reussi" %}
+                                ✅ Réussi
+                            {% elif ligne.commande.statut_paiement == "echoue" %}
+                                ❌ Échoué
+                            {% else %}
+                                🕐 En attente
+                            {% endif %}
+                        </td>
+
+<td class="statut {{ ligne.commande.statut }}">
+
+    {% if ligne.commande.statut == "en_attente" %}
+        🕐 En attente
+
+    {% elif ligne.commande.statut == "confirmee" %}
+        ✅ Confirmée
+
+        <form method="post"
+              action="{% url 'changer_statut_commande' ligne.id %}">
+            {% csrf_token %}
+            <input type="hidden"
+                   name="statut"
+                   value="envoyee_fournisseur">
+            <button type="submit">
+                📦 Envoyer au fournisseur
+            </button>
+        </form>
+
+    {% elif ligne.commande.statut == "envoyee_fournisseur" %}
+        📦 Envoyée au fournisseur
+
+        <form method="post"
+              action="{% url 'changer_statut_commande' ligne.id %}">
+            {% csrf_token %}
+            <input type="hidden"
+                   name="statut"
+                   value="livraison">
+            <button type="submit">
+                🚚 Mettre en livraison
+            </button>
+        </form>
+
+    {% elif ligne.commande.statut == "livraison" %}
+        🚚 En livraison
+
+        <form method="post"
+              action="{% url 'changer_statut_commande' ligne.id %}">
+            {% csrf_token %}
+            <input type="hidden"
+                   name="statut"
+                   value="livree">
+            <button type="submit">
+                🎉 Marquer livrée
+            </button>
+        </form>
+
+    {% elif ligne.commande.statut == "livree" %}
+        🎉 Livrée
+
+    {% elif ligne.commande.statut == "annulee" %}
+        ❌ Annulée
+
+    {% endif %}
+
+</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="vide">
+            📭 Aucune commande pour le moment.
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <div class="bloc">
+
+        <h2>🏢 Informations fournisseur</h2>
+
+        <p>
+            <strong>Nom :</strong>
+            {{ fournisseur.nom }}
+        </p>
+
+        <p>
+            <strong>Pays :</strong>
+            {{ fournisseur.pays }}
+        </p>
+
+        <p>
+            <strong>Téléphone :</strong>
+            {{ fournisseur.telephone }}
+        </p>
+
+        <p>
+            <strong>Email :</strong>
+            {{ fournisseur.email }}
+        </p>
+
+    </div>
+
+
+    <div class="boutons">
+
+        <a class="bouton" href="{% url 'accueil' %}">
+            🏠 Boutique
+        </a>
+
+        <a class="bouton rouge"
+           href="{% url 'deconnexion_fournisseur' %}">
+            🚪 Déconnexion
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

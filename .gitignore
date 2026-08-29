@@ -1,10 +1,22 @@
 __pycache__/
 *.py[cod]
+
+# Base de données locale
+*.sqlite3
+
+# Fichiers de sauvegarde et erreurs
+*.sauvegarde*
+*.save*
+*.erreur*
+
+# Environnement Python
 .venv/
 venv/
-env/
+
+# Variables secrètes
 .env
-db.sqlite3
+
+# Fichiers générés
 media/
 staticfiles/
-
+panier/admin.py.avant_envoi

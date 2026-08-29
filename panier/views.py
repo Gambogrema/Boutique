@@ -3,9 +3,8 @@ from django.db import transaction
 from django.shortcuts import redirect, get_object_or_404, render
 
 from produits.models import Produit
-from .models import Commande
+from .models import Commande, LigneCommande
 from .forms import CommandeForm
-
 
 def ajouter_au_panier(request, produit_id):
     produit = get_object_or_404(Produit, id=produit_id)
@@ -104,7 +103,6 @@ def supprimer_du_panier(request, produit_id):
 
     return redirect("panier")
 
-
 def passer_commande(request):
     panier = request.session.get("panier", {})
 
@@ -131,11 +129,13 @@ def passer_commande(request):
         form = CommandeForm(request.POST)
 
         if form.is_valid():
-
             stock_insuffisant = False
 
             for produit_id, quantite in panier.items():
-                produit = get_object_or_404(Produit, id=produit_id)
+                produit = get_object_or_404(
+                    Produit,
+                    id=produit_id,
+                )
 
                 if quantite > produit.stock:
                     stock_insuffisant = True
@@ -147,9 +147,7 @@ def passer_commande(request):
                     )
 
             if not stock_insuffisant:
-
                 with transaction.atomic():
-
                     commande = form.save(commit=False)
                     commande.total = total
                     commande.save()
@@ -157,11 +155,22 @@ def passer_commande(request):
                     for produit_id, quantite in panier.items():
                         produit = get_object_or_404(
                             Produit,
-                            id=produit_id
+                            id=produit_id,
+                        )
+
+                        LigneCommande.objects.create(
+                            commande=commande,
+                            produit=produit,
+                            fournisseur=produit.fournisseur,
+                            quantite=quantite,
+                            prix_vente=produit.prix,
+                            prix_fournisseur=produit.prix_fournisseur,
                         )
 
                         produit.stock -= quantite
-                        produit.save(update_fields=["stock"])
+                        produit.save(
+                            update_fields=["stock"]
+                        )
 
                 request.session["panier"] = {}
                 request.session.modified = True
@@ -183,8 +192,6 @@ def passer_commande(request):
             "total": total,
         },
     )
-
-
 def commande_confirmation(request, commande_id):
     commande = get_object_or_404(Commande, id=commande_id)
 
@@ -208,9 +215,69 @@ def suivi_commande(request, commande_id):
         },
     )
 
-
 def paiement(request, commande_id):
     commande = get_object_or_404(Commande, id=commande_id)
+
+    # Une commande déjà payée ne peut pas être payée une deuxième fois
+    if commande.statut_paiement == "reussi":
+        return redirect(
+            "paiement_reussi",
+            commande_id=commande.id,
+        )
+
+    if request.method == "POST":
+        moyen_paiement = request.POST.get("moyen_paiement")
+        telephone = request.POST.get("telephone", "").strip()
+
+        print("=== PAIEMENT REÇU ===")
+        print("Moyen :", moyen_paiement)
+        print("Téléphone :", telephone)
+
+        # Vérification du moyen de paiement
+        if moyen_paiement not in ["mtn", "orange"]:
+            return render(
+                request,
+                "panier/paiement.html",
+                {
+                    "commande": commande,
+                    "erreur": "Veuillez choisir MTN Mobile Money ou Orange Money.",
+                },
+            )
+
+        # Nettoyage du numéro
+        telephone = telephone.replace(" ", "").replace("-", "")
+
+        # Vérification simple du numéro camerounais
+        if (
+            not telephone.isdigit()
+            or len(telephone) != 9
+            or not telephone.startswith("6")
+        ):
+            return render(
+                request,
+                "panier/paiement.html",
+                {
+                    "commande": commande,
+                    "erreur": "Veuillez saisir un numéro camerounais valide de 9 chiffres.",
+                },
+            )
+
+        # Enregistrement du paiement simulé
+        commande.moyen_paiement = moyen_paiement
+        commande.telephone = telephone
+        commande.statut_paiement = "reussi"
+        commande.statut = "confirmee"
+        commande.save()
+
+        print("=== PAIEMENT ENREGISTRÉ ===")
+        print("Commande :", commande.id)
+        print("Statut paiement :", commande.statut_paiement)
+        print("Statut commande :", commande.statut)
+
+        return redirect(
+            "paiement_reussi",
+            commande_id=commande.id,
+        )
 
     return render(
         request,
@@ -219,6 +286,8 @@ def paiement(request, commande_id):
             "commande": commande,
         },
     )
+
+
 def paiement_reussi(request, commande_id):
     commande = get_object_or_404(Commande, id=commande_id)
 

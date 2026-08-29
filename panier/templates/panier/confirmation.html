@@ -164,7 +164,11 @@
         </div>
 
         <!-- SUIVI DE COMMANDE -->
-
+<a
+    class="bouton"
+    href="{% url 'paiement' commande.id %}">
+    💳 Payer ma commande
+</a>
         <a
             class="bouton suivi"
             href="{% url 'suivi_commande' commande.id %}">

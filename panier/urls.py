@@ -1,7 +1,5 @@
 from django.urls import path
 
-from django.urls import path
-
 from .views import (
     ajouter_au_panier,
     afficher_panier,
@@ -14,6 +12,7 @@ from .views import (
     paiement,
     paiement_reussi,
 )
+
 
 urlpatterns = [
     path("", afficher_panier, name="panier"),
@@ -54,14 +53,21 @@ urlpatterns = [
         name="commande_confirmation",
     ),
 
-path(
-    "suivi/<int:commande_id>/",
-    suivi_commande,
-    name="suivi_commande",
-),
+    path(
+        "suivi/<int:commande_id>/",
+        suivi_commande,
+        name="suivi_commande",
+    ),
+
     path(
         "paiement/<int:commande_id>/",
         paiement,
         name="paiement",
+    ),
+
+    path(
+        "paiement-reussi/<int:commande_id>/",
+        paiement_reussi,
+        name="paiement_reussi",
     ),
 ]

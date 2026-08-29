@@ -237,6 +237,25 @@
                 💰 Total : {{ commande.total }} FCFA
             </p>
 
+{% if commande.statut_paiement == "reussi" %}
+
+    <p style="color: #15803d; font-weight: bold;">
+        💳 Paiement : ✅ Réussi
+    </p>
+
+{% elif commande.statut_paiement == "en_attente" %}
+
+    <p style="color: #92400e; font-weight: bold;">
+        💳 Paiement : 🕐 En attente
+    </p>
+
+{% elif commande.statut_paiement == "echoue" %}
+
+    <p style="color: #b91c1c; font-weight: bold;">
+        💳 Paiement : ❌ Échoué
+    </p>
+
+{% endif %}
         </div>
 
         {% if commande.statut == "en_attente" %}
